@@ -1,0 +1,48 @@
+{
+	"author": {
+		"name": "Patrik Simek",
+		"url": "https://patriksimek.cz"
+	},
+	"name": "co-mssql",
+	"description": "node-mssql wrappers for \"co\"",
+	"keywords": [
+		"database",
+		"mssql",
+		"sql",
+		"msnodesql",
+		"sqlserver",
+		"tds",
+		"node-tds",
+		"tedious",
+		"node-sqlserver",
+		"co",
+		"generators",
+		"yield"
+	],
+	"version": "0.1.0",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/patriksimek/co-mssql"
+	},
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://opensource.org/licenses/mit-license.php"
+		}
+	],
+	"dependencies": {
+		"mssql": ">=0.4.5"
+	},
+	"devDependencies": {
+		"coffee-script": ">=1.6.2",
+		"mocha": ">=1.12.0"
+	},
+	"engines": {
+		"node": ">=0.11"
+	},
+	"scripts": {
+		"test": "mocha --harmony",
+		"prepublish": "coffee --compile --output ./lib ./src"
+	}
+}
