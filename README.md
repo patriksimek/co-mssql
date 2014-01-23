@@ -2,7 +2,7 @@
 
 [node-mssql](https://github.com/patriksimek/node-mssql) wrappers for [co](https://github.com/visionmedia/co)
 
-There is only one difference from original module - all methods that accepts callback as last argument are thunkified and ready to use with co. This module doesn't override anything in original module, so you can use it side by side with it.
+There is only one difference from original module - all methods that accepts callback as last argument are thunkified and compatible with [co](https://github.com/visionmedia/co). This module doesn't change anything in original module, so you can use them side by side.
 
 ## Installation
 
@@ -11,49 +11,40 @@ There is only one difference from original module - all methods that accepts cal
 ## Quick Example
 
 ```javascript
+var co = require('co'); 
 var sql = require('co-mssql'); 
 
 co(function * () {
-    var config = {
+    var connection = new sql.Connection({
         user: '...',
         password: '...',
         server: 'localhost',
         database: '...'
-    }
-
-    var connection = new sql.Connection(config);
+    });
 
     try {
+    
         yield connection.connect();
-    } catch (ex) {
-        // ... error checks
-    }
-    
-    // Query
+        
+        // Query
 
-    var request = new sql.Request(connection); // or: var request = connection.request();
-
-    try {
-        var recordset = yield request.query('select 1 as number')
-    } catch (ex) {
-        // ... error checks
-    }
-    
-    console.dir(recordset);
-
-    // Stored Procedure
-
-    var request = new sql.Request(connection);
-    request.input('input_parameter', sql.Int, value);
-    request.output('output_parameter', sql.Int);
-
-    try {
+        var request = new sql.Request(connection);
+        var recordset = yield request.query('select 1 as number');
+        
+        console.dir(recordset);
+        
+        // Stored Procedure
+        
+        var request = new sql.Request(connection);
+        request.input('input_parameter', sql.Int, 10);
+        request.output('output_parameter', sql.Int);
         var recordsets = yield request.execute('procedure_name');
+        
+        console.dir(recordsets);
+        
     } catch (ex) {
         // ... error checks
     }
-    
-    console.dir(recordsets);
 })();
 ```
 
