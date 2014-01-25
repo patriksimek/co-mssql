@@ -19,7 +19,7 @@ class Connection extends mssql.Connection
 	###
 	
 	initializeDriver: (driver) ->
-		driver Connection, Transaction, Request
+		driver Connection, Transaction, Request, mssql.ConnectionError, mssql.TransactionError, mssql.RequestError
 	
 	###
 	Thunkified version of connect method.
@@ -134,9 +134,14 @@ module.exports.Connection = Connection
 module.exports.Transaction = Transaction
 module.exports.Request = Request
 
+module.exports.ISOLATION_LEVEL = mssql.ISOLATION_LEVEL
 module.exports.DRIVERS = mssql.DRIVERS
 module.exports.TYPES = mssql.TYPES
 module.exports.map = mssql.map
+
+Object.defineProperty module.exports, "fix",
+	get: -> mssql.fix
+	set: (value) -> mssql.fix = value
 
 # append datatypes to this modules export
 
