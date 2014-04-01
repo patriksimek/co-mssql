@@ -133,10 +133,12 @@ module.exports.close = ->
 module.exports.Connection = Connection
 module.exports.Transaction = Transaction
 module.exports.Request = Request
+module.exports.Table = mssql.Table
 
 module.exports.ISOLATION_LEVEL = mssql.ISOLATION_LEVEL
 module.exports.DRIVERS = mssql.DRIVERS
 module.exports.TYPES = mssql.TYPES
+module.exports.MAX = mssql.MAX
 module.exports.map = mssql.map
 
 Object.defineProperty module.exports, "fix",
