@@ -48,11 +48,42 @@ class Connection extends mssql.Connection
 	transaction: ->
 		new Transaction @
 
+class PreparedStatement extends mssql.PreparedStatement
+	###
+	Create new PreparedStatement.
+	
+	@param {Connection|Transaction} connection If ommited, global connection is used instead.
+	###
+	
+	constructor: (connection) ->
+		super connection
+	
+	###
+	Thunkified version of prepare method.
+	###
+	
+	prepare: (statement) ->
+		(callback) => super statement, callback
+		
+	###
+	Thunkified version of execute method.
+	###
+	
+	execute: (values) ->
+		(callback) => super values, (err, result) -> callback err, result # we are dropping returnValue here, so we're compatible with generator based flow controllers
+		
+	###
+	Thunkified version of rollback method.
+	###
+		
+	unprepare: ->
+		(callback) => super callback
+
 class Transaction extends mssql.Transaction
 	###
 	Create new Transaction.
 	
-	@param {Transaction} connection If ommited, global connection is used instead.
+	@param {Connection} connection If ommited, global connection is used instead.
 	###
 	
 	constructor: (connection) ->
@@ -134,6 +165,12 @@ module.exports.Connection = Connection
 module.exports.Transaction = Transaction
 module.exports.Request = Request
 module.exports.Table = mssql.Table
+module.exports.PreparedStatement = PreparedStatement
+
+module.exports.ConnectionError = mssql.ConnectionError
+module.exports.TransactionError = mssql.TransactionError
+module.exports.RequestError = mssql.RequestError
+module.exports.PreparedStatementError = mssql.PreparedStatementError
 
 module.exports.ISOLATION_LEVEL = mssql.ISOLATION_LEVEL
 module.exports.DRIVERS = mssql.DRIVERS
