@@ -1,34 +1,20 @@
 var co = require('co');
 var sql = require('../../');
 var assert = require('assert');
+var config = require('./_connection')('tedious')
 
 var connection1, connection2;
 
 describe('tedious multiple connections test suite', function() {
 	before(function(done) {
 		co(function * () {
-			connection1 = new sql.Connection({
-				user: 'xsp_test2',
-				password: 'sweet',
-				server: '192.168.2.2',
-				database: 'xsp'
-			});
+			connection1 = new sql.Connection(config.user2());
 			yield connection1.connect();
 				
-			connection2 = new sql.Connection({
-				user: 'xsp_test3',
-				password: 'sweet',
-				server: '192.168.2.2',
-				database: 'xsp'
-			});
+			connection2 = new sql.Connection(config.user3());
 			yield connection2.connect();
 
-			yield sql.connect({
-				user: 'xsp_test',
-				password: 'sweet',
-				server: '192.168.2.2',
-				database: 'xsp'
-			});
+			yield sql.connect(config());
 
 			done();
 		})();

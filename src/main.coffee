@@ -130,13 +130,22 @@ class Request extends mssql.Request
 		super connection
 	
 	###
+	Thunkified version of batch method.
+	
+	@returns {Function}
+	###
+	
+	batch: (batch) ->
+		(callback) => super batch, (err, result) -> callback err, result
+	
+	###
 	Thunkified version of query method.
 	
 	@returns {Function}
 	###
 	
 	query: (command) ->
-		(callback) => super command, (err, result) -> callback err, result # we are dropping returnValue here, so we're compatible with generator based flow controllers
+		(callback) => super command, (err, result) -> callback err, result
 	
 	###
 	Thunkified version of execute method.

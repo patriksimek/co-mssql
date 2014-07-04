@@ -1,16 +1,12 @@
 var co = require('co');
 var sql = require('../../');
 var assert = require('assert');
+var config = require('./_connection')('tedious')
 
 describe('tedious test suite', function() {
 	before(function(done) {
 		co(function * () {
-			yield sql.connect({
-				user: 'xsp_test',
-				password: 'sweet',
-				server: '192.168.2.2',
-				database: 'xsp'
-			});
+			yield sql.connect(config());
 			
 			var req = new sql.Request();
 			yield req.query('delete from tran_test');
@@ -167,6 +163,18 @@ describe('tedious test suite', function() {
 			}
 
 			throw new Error("Should throw error.");
+		})();
+	});
+	
+	it('batch', function(done) {
+		co(function * () {
+			var request = new sql.Request();
+			var recordset = yield request.batch('select 1 as num');
+			
+			assert.equal(recordset.length, 1);
+			assert.equal(recordset[0].num, 1);
+				
+			done();
 		})();
 	});
 

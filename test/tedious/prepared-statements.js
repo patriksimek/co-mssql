@@ -1,16 +1,12 @@
 var co = require('co');
 var sql = require('../../');
 var assert = require('assert');
+var config = require('./_connection')('tedious')
 
 describe('tedious prepared statements test suite', function() {
 	before(function(done) {
 		co(function * () {
-			yield sql.connect({
-				user: 'xsp_test',
-				password: 'sweet',
-				server: '192.168.2.2',
-				database: 'xsp'
-			});
+			yield sql.connect(config());
 
 			done();
 		})();

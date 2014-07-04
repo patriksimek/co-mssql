@@ -1,16 +1,12 @@
 var co = require('co');
 var sql = require('../../');
 var assert = require('assert');
+var config = require('./_connection')('tedious')
 
 describe('tedious transactions test suite', function() {
 	before(function(done) {
 		co(function * () {
-			yield sql.connect({
-				user: 'xsp_test',
-				password: 'sweet',
-				server: '192.168.2.2',
-				database: 'xsp'
-			});
+			yield sql.connect(config());
 			
 			var req = new sql.Request();
 			yield req.query('delete from tran_test');
