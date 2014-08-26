@@ -130,6 +130,15 @@ class Request extends mssql.Request
 		super connection
 	
 	###
+	Thunkified version of bulk method.
+	
+	@returns {Function}
+	###
+	
+	bulk: (table) ->
+		(callback) => super table, (err, result) -> callback err, result
+	
+	###
 	Thunkified version of batch method.
 	
 	@returns {Function}
