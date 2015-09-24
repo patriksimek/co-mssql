@@ -179,6 +179,9 @@ module.exports.connect = (config) ->
 module.exports.close = ->
 	mssql.close()
 
+module.exports.on = ->
+	mssql.on arguments...
+
 module.exports.Connection = Connection
 module.exports.Transaction = Transaction
 module.exports.Request = Request
@@ -199,6 +202,10 @@ module.exports.map = mssql.map
 Object.defineProperty module.exports, "fix",
 	get: -> mssql.fix
 	set: (value) -> mssql.fix = value
+
+Object.defineProperty module.exports, 'Promise',
+	get: -> mssql.Promise
+	set: (value) -> mssql.Promise = value
 
 # append datatypes to this modules export
 

@@ -20,7 +20,7 @@
 		"generators",
 		"yield"
 	],
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"main": "index.js",
 	"repository": {
 		"type": "git",
@@ -28,7 +28,7 @@
 	},
 	"license": "MIT",
 	"dependencies": {
-		"mssql": "^2.0.0"
+		"mssql": "^2.3.1"
 	},
 	"devDependencies": {
 		"coffee-script": "^1.9.0",
