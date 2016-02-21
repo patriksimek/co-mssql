@@ -1,6 +1,5 @@
 node_modules
 .DS_Store
 .svn
-.coffeemaker
 /lib/*.js
-/test/tedious/_connection.js
+/test/.mssql.json

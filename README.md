@@ -51,7 +51,7 @@ co(function * () {
 <a name="license" />
 ## License
 
-Copyright (c) 2014 Patrik Simek
+Copyright (c) 2014-2016 Patrik Simek
 
 The MIT License
 

@@ -1,91 +1,18 @@
 var co = require('co');
 var sql = require('../../');
 var assert = require('assert');
-var config = require('./_connection')('tedious')
+
+var config = function() {
+	var cfg = JSON.parse(require('fs').readFileSync(__dirname +"/../.mssql.json"));
+	cfg.driver = 'tedious';
+	return cfg;
+}
 
 describe('tedious test suite', function() {
 	before(function(done) {
 		co(function * () {
 			yield sql.connect(config());
-			
-			var req = new sql.Request();
-			yield req.query('delete from tran_test');
 
-			done();
-		})();
-	});
-	
-	it('stored procedure', function(done) {
-		co(function * () {
-			var request = new sql.Request();
-			request.input('in', sql.Int, null);
-			request.input('in2', sql.BigInt, 0);
-			request.input('in3', sql.NVarChar, 'ěščřžýáíé');
-			request.output('out', sql.Int);
-			request.output('out2', sql.Int);
-		
-			var recordsets = yield request.execute('__test');
-		
-			assert.equal(recordsets.returnValue, 11);
-			assert.equal(recordsets.length, 3);
-			
-			assert.equal(recordsets[0].length, 2);
-			assert.equal(recordsets[0][0].a, 1);
-			assert.equal(recordsets[0][0].b, 2);
-			assert.equal(recordsets[0][1].a, 3);
-			assert.equal(recordsets[0][1].b, 4);
-			
-			assert.equal(recordsets[1].length, 1);
-			assert.equal(recordsets[1][0].c, 5);
-			assert.equal(recordsets[1][0].d, 6);
-			
-			// there should be 3 values - 0, 111, asdf - but there is a bug with bigint in tedious when 0 value is casted as null
-			//assert.equal(recordsets[1][0].e.length, 3);
-			//assert.equal(recordsets[1][0].e[0], 0);
-			//assert.equal(recordsets[1][0].e[1], 111);
-			//assert.equal(recordsets[1][0].e[2], 'asdf');
-			
-			assert.equal(recordsets[1][0].f, null);
-			assert.equal(recordsets[1][0].g, 'ěščřžýáíé');
-			assert.equal(recordsets[2].length, 0);
-
-			assert.equal(request.parameters.out.value, 99);
-			assert.equal(request.parameters.out2.value, null);
-			
-			done();
-		})();
-	});
-	
-	it('stored procedure with one empty recordset', function(done) {
-		co(function * () {
-			var request = new sql.Request();
-			var recordsets = yield request.execute('__test2');
-			
-			assert.equal(recordsets.returnValue, 11);
-			assert.equal(recordsets.length, 2);
-			
-			done();
-		})();
-	});
-	
-	it('empty query', function(done) {
-		co(function * () {
-			var request = new sql.Request();
-			var recordset = yield request.query('');
-			
-			assert.equal(recordset, null);
-
-			done();
-		})();
-	});
-	
-	it('query with no recordset', function(done) {
-		co(function * () {
-			var request = new sql.Request();
-			var recordset = yield request.query('select * from sys.tables where name = \'______\'');
-			
-			assert.equal(recordset.length, 0);
-			
 			done();
 		})();
 	});
@@ -163,18 +90,6 @@ describe('tedious test suite', function() {
 			}
 
 			throw new Error("Should throw error.");
-		})();
-	});
-	
-	it('batch', function(done) {
-		co(function * () {
-			var request = new sql.Request();
-			var recordset = yield request.batch('select 1 as num');
-			
-			assert.equal(recordset.length, 1);
-			assert.equal(recordset[0].num, 1);
-				
-			done();
 		})();
 	});
 
